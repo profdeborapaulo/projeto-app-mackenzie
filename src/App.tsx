@@ -3,26 +3,108 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChallengesModule from './components/ChallengesModule';
 import ConceptModule from './components/ConceptModule';
 import ExamplesModule from './components/ExamplesModule';
 import Navbar from './components/Navbar';
 import SimulatorModule from './components/SimulatorModule';
 import { CHALLENGES } from './data/learningContent';
-import { ModuleTab } from './types/lab';
+import { ModuleTab, SavedProgress } from './types/lab';
+
+const STORAGE_KEY = 'js-lab-progress-v1';
+
+const EMPTY_PROGRESS: SavedProgress = {
+  solvedIds: [],
+  mcSelections: {},
+  blankInputs: {},
+};
+
+function loadSavedProgress(): SavedProgress {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return EMPTY_PROGRESS;
+    const parsed = JSON.parse(raw) as Partial<SavedProgress>;
+    const validIds = new Set(CHALLENGES.map((c) => c.id));
+
+    const solvedIds = Array.isArray(parsed.solvedIds)
+      ? parsed.solvedIds.filter(
+          (id): id is string => typeof id === 'string' && validIds.has(id)
+        )
+      : [];
+
+    const mcSelections =
+      parsed.mcSelections && typeof parsed.mcSelections === 'object'
+        ? parsed.mcSelections
+        : {};
+
+    const blankInputs =
+      parsed.blankInputs && typeof parsed.blankInputs === 'object'
+        ? parsed.blankInputs
+        : {};
+
+    return { solvedIds, mcSelections, blankInputs };
+  } catch {
+    return EMPTY_PROGRESS;
+  }
+}
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<ModuleTab>('conceito');
-  const [solvedIds, setSolvedIds] = useState<string[]>([]);
+  const [progress, setProgress] = useState<SavedProgress>(() =>
+    loadSavedProgress()
+  );
 
-  const handleMarkSolved = (challengeId: string, isSolved: boolean) => {
-    setSolvedIds((prev) => {
-      if (isSolved) {
-        return prev.includes(challengeId) ? prev : [...prev, challengeId];
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    } catch {
+      // Ignore storage quota or private-mode errors gracefully
+    }
+  }, [progress]);
+
+  const handleUpdateChallengeProgress = (
+    challengeId: string,
+    isSolved: boolean,
+    mcSelection?: string,
+    blankValues?: Record<string, string>
+  ) => {
+    setProgress((prev) => {
+      const nextSolved = isSolved
+        ? prev.solvedIds.includes(challengeId)
+          ? prev.solvedIds
+          : [...prev.solvedIds, challengeId]
+        : prev.solvedIds.filter((id) => id !== challengeId);
+
+      const nextMc = { ...prev.mcSelections };
+      if (mcSelection !== undefined) {
+        if (mcSelection) {
+          nextMc[challengeId] = mcSelection;
+        } else {
+          delete nextMc[challengeId];
+        }
       }
-      return prev.filter((id) => id !== challengeId);
+
+      const nextBlanks = { ...prev.blankInputs };
+      if (blankValues !== undefined) {
+        nextBlanks[challengeId] = blankValues;
+      }
+
+      return {
+        solvedIds: nextSolved,
+        mcSelections: nextMc,
+        blankInputs: nextBlanks,
+      };
     });
+  };
+
+  const handleResetAllProgress = () => {
+    setProgress(EMPTY_PROGRESS);
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignore storage errors
+    }
   };
 
   return (
@@ -30,7 +112,7 @@ export default function App() {
       <Navbar
         activeTab={activeTab}
         onSelectTab={setActiveTab}
-        solvedCount={solvedIds.length}
+        solvedCount={progress.solvedIds.length}
         totalChallenges={CHALLENGES.length}
       />
 
@@ -42,8 +124,9 @@ export default function App() {
         {activeTab === 'exemplos' && <ExamplesModule />}
         {activeTab === 'desafios' && (
           <ChallengesModule
-            solvedIds={solvedIds}
-            onMarkSolved={handleMarkSolved}
+            savedProgress={progress}
+            onUpdateProgress={handleUpdateChallengeProgress}
+            onResetAllProgress={handleResetAllProgress}
           />
         )}
       </main>

@@ -1,19 +1,30 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import {
   BookCheck,
   CheckCircle2,
   HelpCircle,
   RotateCcw,
   Sparkles,
+  Trash2,
   Trophy,
   XCircle,
 } from 'lucide-react';
 import { CHALLENGES } from '../data/learningContent';
-import { FillBlankChallenge, MultipleChoiceChallenge } from '../types/lab';
+import {
+  FillBlankChallenge,
+  MultipleChoiceChallenge,
+  SavedProgress,
+} from '../types/lab';
 
 interface ChallengesModuleProps {
-  solvedIds: string[];
-  onMarkSolved: (challengeId: string, isSolved: boolean) => void;
+  savedProgress: SavedProgress;
+  onUpdateProgress: (
+    challengeId: string,
+    isSolved: boolean,
+    mcSelection?: string,
+    blankValues?: Record<string, string>
+  ) => void;
+  onResetAllProgress: () => void;
 }
 
 interface ChallengeResultState {
@@ -22,26 +33,70 @@ interface ChallengeResultState {
   blankResults?: Record<string, boolean>;
 }
 
+function buildInitialResults(
+  savedProgress: SavedProgress
+): Record<string, ChallengeResultState> {
+  const initial: Record<string, ChallengeResultState> = {};
+  for (const ch of CHALLENGES) {
+    if (savedProgress.solvedIds.includes(ch.id)) {
+      if (ch.type === 'fill-blank') {
+        const blankResults: Record<string, boolean> = {};
+        for (const b of ch.blanks) {
+          blankResults[b.id] = true;
+        }
+        initial[ch.id] = { checked: true, isCorrect: true, blankResults };
+      } else {
+        initial[ch.id] = { checked: true, isCorrect: true };
+      }
+    }
+  }
+  return initial;
+}
+
 export default function ChallengesModule({
-  solvedIds,
-  onMarkSolved,
+  savedProgress,
+  onUpdateProgress,
+  onResetAllProgress,
 }: ChallengesModuleProps) {
   const [activeChallengeIdx, setActiveChallengeIdx] = useState<number>(0);
 
-  // Answers state per challenge ID
-  const [mcSelections, setMcSelections] = useState<Record<string, string>>({});
+  // Answers state hydrated from localStorage-backed savedProgress
+  const [mcSelections, setMcSelections] = useState<Record<string, string>>(
+    () => savedProgress.mcSelections
+  );
   const [blankInputs, setBlankInputs] = useState<
     Record<string, Record<string, string>>
-  >({});
+  >(() => savedProgress.blankInputs);
   const [focusedBlank, setFocusedBlank] = useState<string>('b1');
   const [results, setResults] = useState<Record<string, ChallengeResultState>>(
-    {}
+    () => buildInitialResults(savedProgress)
   );
   const [openTips, setOpenTips] = useState<Record<string, boolean>>({});
   const [openSolutions, setOpenSolutions] = useState<Record<string, boolean>>(
-    {}
+    () => {
+      const sols: Record<string, boolean> = {};
+      for (const id of savedProgress.solvedIds) {
+        sols[id] = true;
+      }
+      return sols;
+    }
   );
 
+  // Keep local state synchronized if all progress is reset
+  useEffect(() => {
+    if (
+      savedProgress.solvedIds.length === 0 &&
+      Object.keys(savedProgress.mcSelections).length === 0 &&
+      Object.keys(savedProgress.blankInputs).length === 0
+    ) {
+      setMcSelections({});
+      setBlankInputs({});
+      setResults({});
+      setOpenSolutions({});
+    }
+  }, [savedProgress]);
+
+  const solvedIds = savedProgress.solvedIds;
   const challenge = CHALLENGES[activeChallengeIdx];
   const currentResult = results[challenge.id];
   const isTipOpen = openTips[challenge.id] ?? false;
@@ -85,15 +140,11 @@ export default function ChallengesModule({
     }
   };
 
-  const handleQuickFill = (
-    ch: FillBlankChallenge,
-    value: string
-  ) => {
+  const handleQuickFill = (ch: FillBlankChallenge, value: string) => {
     const targetBlankId =
       ch.blanks.find((b) => b.id === focusedBlank)?.id ?? ch.blanks[0].id;
     handleBlankChange(ch.id, targetBlankId, value);
 
-    // Advance focus to next empty blank for convenience
     const currentInputs = {
       ...(blankInputs[ch.id] ?? {}),
       [targetBlankId]: value,
@@ -115,7 +166,7 @@ export default function ChallengesModule({
         ...prev,
         [challenge.id]: { checked: true, isCorrect },
       }));
-      onMarkSolved(challenge.id, isCorrect);
+      onUpdateProgress(challenge.id, isCorrect, selected, undefined);
       if (isCorrect) {
         setOpenSolutions((prev) => ({ ...prev, [challenge.id]: true }));
       }
@@ -143,7 +194,7 @@ export default function ChallengesModule({
           blankResults,
         },
       }));
-      onMarkSolved(challenge.id, allCorrect);
+      onUpdateProgress(challenge.id, allCorrect, undefined, inputs);
       if (allCorrect) {
         setOpenSolutions((prev) => ({ ...prev, [challenge.id]: true }));
       }
@@ -157,9 +208,11 @@ export default function ChallengesModule({
         delete next[challenge.id];
         return next;
       });
+      onUpdateProgress(challenge.id, false, '', undefined);
     } else {
       setBlankInputs((prev) => ({ ...prev, [challenge.id]: {} }));
       setFocusedBlank(challenge.blanks[0].id);
+      onUpdateProgress(challenge.id, false, undefined, {});
     }
     setResults((prev) => {
       const next = { ...prev };
@@ -167,7 +220,6 @@ export default function ChallengesModule({
       return next;
     });
     setOpenSolutions((prev) => ({ ...prev, [challenge.id]: false }));
-    onMarkSolved(challenge.id, false);
   };
 
   const canVerify =
@@ -181,7 +233,7 @@ export default function ChallengesModule({
 
   return (
     <div className="space-y-6">
-      {/* Header + Progress Bar */}
+      {/* Header + Progress Summary */}
       <section className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 sm:p-6 space-y-4">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
@@ -192,25 +244,38 @@ export default function ChallengesModule({
               Desafios Interativos com Gabarito
             </h1>
             <p className="text-sm text-slate-300">
-              Resolva os 3 desafios abaixo para testar seu domínio sobre índices,{' '}
-              <code className="text-amber-300">for</code> e{' '}
-              <code className="text-violet-300">while</code>.
+              Resolva os 3 desafios abaixo para subir de nível. Seu progresso é
+              salvo automaticamente neste navegador.
             </p>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-[#0B1120] px-4 py-3 flex items-center gap-3 shrink-0">
-            <Trophy
-              className={`h-5 w-5 ${
-                allSolved ? 'text-emerald-400' : 'text-amber-400'
-              }`}
-              aria-hidden="true"
-            />
-            <div>
-              <p className="text-xs text-slate-400">Seu progresso</p>
-              <p className="font-mono text-sm font-bold text-slate-100">
-                {solvedIds.length} de {CHALLENGES.length} concluídos
-              </p>
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="rounded-xl border border-slate-800 bg-[#0B1120] px-4 py-3 flex items-center gap-3">
+              <Trophy
+                className={`h-5 w-5 ${
+                  allSolved ? 'text-emerald-400' : 'text-amber-400'
+                }`}
+                aria-hidden="true"
+              />
+              <div>
+                <p className="text-xs text-slate-400">Seu progresso</p>
+                <p className="font-mono text-sm font-bold text-slate-100 tabular-nums">
+                  {solvedIds.length} de {CHALLENGES.length} concluídos
+                </p>
+              </div>
             </div>
+
+            {solvedIds.length > 0 && (
+              <button
+                type="button"
+                onClick={onResetAllProgress}
+                title="Zerar progresso salvo"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700/80 bg-[#0B1120] px-3 py-3 text-xs font-medium text-slate-400 hover:border-rose-500/40 hover:text-rose-300 transition-colors cursor-pointer"
+              >
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
+                <span className="hidden sm:inline">Zerar</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -267,11 +332,11 @@ export default function ChallengesModule({
             />
             <div>
               <p className="font-display text-base font-bold text-emerald-200">
-                Parabéns! Você completou todos os desafios!
+                Parabéns! Você alcançou o Nível 4: Ninja de Arrays!
               </p>
               <p className="text-xs sm:text-sm text-emerald-100/80">
-                Você já domina os fundamentos de Arrays, índices, for e while
-                para o 4º bimestre.
+                Você completou todos os desafios e já domina os fundamentos de
+                Arrays, índices, for e while para o 4º bimestre.
               </p>
             </div>
           </div>

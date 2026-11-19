@@ -94,3 +94,10 @@ export interface FillBlankChallenge {
 }
 
 export type ChallengeItem = MultipleChoiceChallenge | FillBlankChallenge;
+
+export interface SavedProgress {
+  solvedIds: string[];
+  mcSelections: Record<string, string>;
+  blankInputs: Record<string, Record<string, string>>;
+}
+
