@@ -1,0 +1,980 @@
+import { ChallengeItem, PracticalExample, SimulatorScenario } from '../types/lab';
+
+export const SIMULATOR_SCENARIOS: SimulatorScenario[] = [
+  {
+    id: 'for-frutas',
+    title: 'Percorrer Lista (for)',
+    subtitle: 'Lendo cada item do array do índice 0 até o final',
+    loopType: 'for',
+    arrayName: 'frutas',
+    arrayItems: ['Maçã', 'Uva', 'Kiwi', 'Manga'],
+    codeLines: [
+      'const frutas = ["Maçã", "Uva", "Kiwi", "Manga"];',
+      'for (let i = 0; i < frutas.length; i++) {',
+      '  const item = frutas[i];',
+      '  console.log("Índice " + i + ": " + item);',
+      '}',
+      'console.log("Fim da lista!");',
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        activeLine: 1,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [],
+        consoleOutput: [],
+        explanation:
+          'Criamos o array "frutas" com 4 elementos. Na memória, eles ficam guardados nas posições (índices) 0, 1, 2 e 3. Portanto, frutas.length vale 4.',
+      },
+      {
+        stepNumber: 2,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [{ name: 'i', value: '0', highlight: true, type: 'number' }],
+        conditionCheck: { expression: '0 < 4', result: true },
+        consoleOutput: [],
+        explanation:
+          'O loop "for" começa criando o contador i = 0. Em seguida, testa a condição: i < frutas.length (0 < 4). Como é verdadeiro, entramos no bloco!',
+      },
+      {
+        stepNumber: 3,
+        activeLine: 3,
+        activeIndex: 0,
+        visitedIndices: [],
+        variables: [
+          { name: 'i', value: '0', type: 'number' },
+          { name: 'item', value: '"Maçã"', highlight: true, type: 'string' },
+        ],
+        consoleOutput: [],
+        explanation:
+          'Como i vale 0, frutas[0] acessa a primeira gaveta da memória e guarda "Maçã" na variável item.',
+      },
+      {
+        stepNumber: 4,
+        activeLine: 4,
+        activeIndex: 0,
+        visitedIndices: [],
+        variables: [
+          { name: 'i', value: '0', type: 'number' },
+          { name: 'item', value: '"Maçã"', type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã'],
+        explanation:
+          'O console.log exibe a primeira mensagem combinando o índice atual (0) e o valor ("Maçã").',
+      },
+      {
+        stepNumber: 5,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [0],
+        variables: [{ name: 'i', value: '1', highlight: true, type: 'number' }],
+        conditionCheck: { expression: '1 < 4', result: true },
+        consoleOutput: ['Índice 0: Maçã'],
+        explanation:
+          'Fim da 1ª volta! O i++ aumenta i de 0 para 1. Testamos novamente: 1 < 4 é verdadeiro. Vamos para a próxima volta!',
+      },
+      {
+        stepNumber: 6,
+        activeLine: 3,
+        activeIndex: 1,
+        visitedIndices: [0],
+        variables: [
+          { name: 'i', value: '1', type: 'number' },
+          { name: 'item', value: '"Uva"', highlight: true, type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã'],
+        explanation:
+          'Agora i vale 1, então frutas[1] lê a segunda gaveta e guarda "Uva" na variável item.',
+      },
+      {
+        stepNumber: 7,
+        activeLine: 4,
+        activeIndex: 1,
+        visitedIndices: [0],
+        variables: [
+          { name: 'i', value: '1', type: 'number' },
+          { name: 'item', value: '"Uva"', type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva'],
+        explanation:
+          'Exibimos "Índice 1: Uva" no console.',
+      },
+      {
+        stepNumber: 8,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [0, 1],
+        variables: [{ name: 'i', value: '2', highlight: true, type: 'number' }],
+        conditionCheck: { expression: '2 < 4', result: true },
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva'],
+        explanation:
+          'O i++ soma 1 novamente: agora i = 2. Testamos: 2 < 4 é verdadeiro. Seguimos percorrendo!',
+      },
+      {
+        stepNumber: 9,
+        activeLine: 3,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'item', value: '"Kiwi"', highlight: true, type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva'],
+        explanation:
+          'Acessamos frutas[2] e pegamos o valor "Kiwi".',
+      },
+      {
+        stepNumber: 10,
+        activeLine: 4,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'item', value: '"Kiwi"', type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva', 'Índice 2: Kiwi'],
+        explanation:
+          'O console recebe "Índice 2: Kiwi".',
+      },
+      {
+        stepNumber: 11,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2],
+        variables: [{ name: 'i', value: '3', highlight: true, type: 'number' }],
+        conditionCheck: { expression: '3 < 4', result: true },
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva', 'Índice 2: Kiwi'],
+        explanation:
+          'O i++ leva i para 3. Testamos: 3 < 4 ainda é verdadeiro. Esta será a última posição válida do array!',
+      },
+      {
+        stepNumber: 12,
+        activeLine: 3,
+        activeIndex: 3,
+        visitedIndices: [0, 1, 2],
+        variables: [
+          { name: 'i', value: '3', type: 'number' },
+          { name: 'item', value: '"Manga"', highlight: true, type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva', 'Índice 2: Kiwi'],
+        explanation:
+          'Acessamos frutas[3] (o último elemento) e guardamos "Manga".',
+      },
+      {
+        stepNumber: 13,
+        activeLine: 4,
+        activeIndex: 3,
+        visitedIndices: [0, 1, 2],
+        variables: [
+          { name: 'i', value: '3', type: 'number' },
+          { name: 'item', value: '"Manga"', type: 'string' },
+        ],
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva', 'Índice 2: Kiwi', 'Índice 3: Manga'],
+        explanation:
+          'Exibimos "Índice 3: Manga" no console.',
+      },
+      {
+        stepNumber: 14,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2, 3],
+        variables: [{ name: 'i', value: '4', highlight: true, type: 'number' }],
+        conditionCheck: { expression: '4 < 4', result: false },
+        consoleOutput: ['Índice 0: Maçã', 'Índice 1: Uva', 'Índice 2: Kiwi', 'Índice 3: Manga'],
+        explanation:
+          'Atenção! O i++ mudou i para 4. Agora 4 < 4 é FALSO! O loop encerra imediatamente para não tentar ler uma posição que não existe.',
+      },
+      {
+        stepNumber: 15,
+        activeLine: 6,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2, 3],
+        variables: [],
+        consoleOutput: [
+          'Índice 0: Maçã',
+          'Índice 1: Uva',
+          'Índice 2: Kiwi',
+          'Índice 3: Manga',
+          'Fim da lista!',
+        ],
+        explanation:
+          'Depois que o loop termina, o programa continua na linha seguinte e imprime "Fim da lista!".',
+      },
+    ],
+  },
+  {
+    id: 'for-soma',
+    title: 'Somar Pontos (for)',
+    subtitle: 'Usando uma variável acumuladora para somar valores',
+    loopType: 'for',
+    arrayName: 'pontos',
+    arrayItems: [10, 25, 15, 30],
+    codeLines: [
+      'const pontos = [10, 25, 15, 30];',
+      'let total = 0;',
+      'for (let i = 0; i < pontos.length; i++) {',
+      '  total = total + pontos[i];',
+      '  console.log("+" + pontos[i] + " pts -> Total: " + total);',
+      '}',
+      'console.log("Pontuação final: " + total);',
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        activeLine: 1,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [],
+        consoleOutput: [],
+        explanation:
+          'Criamos o array "pontos" com 4 pontuações de fases de um jogo: [10, 25, 15, 30].',
+      },
+      {
+        stepNumber: 2,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [{ name: 'total', value: '0', highlight: true, type: 'number' }],
+        consoleOutput: [],
+        explanation:
+          'Criamos a variável acumuladora "total" começando em 0 ANTES do loop. Se ela ficasse dentro do loop, zeraria toda hora!',
+      },
+      {
+        stepNumber: 3,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [
+          { name: 'total', value: '0', type: 'number' },
+          { name: 'i', value: '0', highlight: true, type: 'number' },
+        ],
+        conditionCheck: { expression: '0 < 4', result: true },
+        consoleOutput: [],
+        explanation: 'Iniciamos i = 0. Como 0 < 4 é verdadeiro, entramos no loop.',
+      },
+      {
+        stepNumber: 4,
+        activeLine: 4,
+        activeIndex: 0,
+        visitedIndices: [],
+        variables: [
+          { name: 'total', value: '10', highlight: true, type: 'number' },
+          { name: 'i', value: '0', type: 'number' },
+        ],
+        consoleOutput: [],
+        explanation: 'Somamos total (0) + pontos[0] (10). Agora total passa a valer 10.',
+      },
+      {
+        stepNumber: 5,
+        activeLine: 5,
+        activeIndex: 0,
+        visitedIndices: [],
+        variables: [
+          { name: 'total', value: '10', type: 'number' },
+          { name: 'i', value: '0', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10'],
+        explanation: 'Mostramos a soma parcial no console.',
+      },
+      {
+        stepNumber: 6,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [0],
+        variables: [
+          { name: 'total', value: '10', type: 'number' },
+          { name: 'i', value: '1', highlight: true, type: 'number' },
+        ],
+        conditionCheck: { expression: '1 < 4', result: true },
+        consoleOutput: ['+10 pts -> Total: 10'],
+        explanation: 'i++ atualiza i para 1. Como 1 < 4 é verdadeiro, continuamos.',
+      },
+      {
+        stepNumber: 7,
+        activeLine: 4,
+        activeIndex: 1,
+        visitedIndices: [0],
+        variables: [
+          { name: 'total', value: '35', highlight: true, type: 'number' },
+          { name: 'i', value: '1', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10'],
+        explanation: 'Somamos total (10) + pontos[1] (25). O novo total é 35.',
+      },
+      {
+        stepNumber: 8,
+        activeLine: 5,
+        activeIndex: 1,
+        visitedIndices: [0],
+        variables: [
+          { name: 'total', value: '35', type: 'number' },
+          { name: 'i', value: '1', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35'],
+        explanation: 'Imprimimos a soma acumulada até o índice 1.',
+      },
+      {
+        stepNumber: 9,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'total', value: '35', type: 'number' },
+          { name: 'i', value: '2', highlight: true, type: 'number' },
+        ],
+        conditionCheck: { expression: '2 < 4', result: true },
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35'],
+        explanation: 'i++ atualiza i para 2. Como 2 < 4 é verdadeiro, vamos ao próximo item.',
+      },
+      {
+        stepNumber: 10,
+        activeLine: 4,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'total', value: '50', highlight: true, type: 'number' },
+          { name: 'i', value: '2', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35'],
+        explanation: 'Somamos total (35) + pontos[2] (15). Agora total é 50.',
+      },
+      {
+        stepNumber: 11,
+        activeLine: 5,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'total', value: '50', type: 'number' },
+          { name: 'i', value: '2', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35', '+15 pts -> Total: 50'],
+        explanation: 'Imprimimos o andamento da soma no console.',
+      },
+      {
+        stepNumber: 12,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2],
+        variables: [
+          { name: 'total', value: '50', type: 'number' },
+          { name: 'i', value: '3', highlight: true, type: 'number' },
+        ],
+        conditionCheck: { expression: '3 < 4', result: true },
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35', '+15 pts -> Total: 50'],
+        explanation: 'i++ atualiza i para 3. 3 < 4 é verdadeiro, última rodada!',
+      },
+      {
+        stepNumber: 13,
+        activeLine: 4,
+        activeIndex: 3,
+        visitedIndices: [0, 1, 2],
+        variables: [
+          { name: 'total', value: '80', highlight: true, type: 'number' },
+          { name: 'i', value: '3', type: 'number' },
+        ],
+        consoleOutput: ['+10 pts -> Total: 10', '+25 pts -> Total: 35', '+15 pts -> Total: 50'],
+        explanation: 'Somamos total (50) + pontos[3] (30). Total agora vale 80!',
+      },
+      {
+        stepNumber: 14,
+        activeLine: 5,
+        activeIndex: 3,
+        visitedIndices: [0, 1, 2],
+        variables: [
+          { name: 'total', value: '80', type: 'number' },
+          { name: 'i', value: '3', type: 'number' },
+        ],
+        consoleOutput: [
+          '+10 pts -> Total: 10',
+          '+25 pts -> Total: 35',
+          '+15 pts -> Total: 50',
+          '+30 pts -> Total: 80',
+        ],
+        explanation: 'Mostramos o último incremento no console.',
+      },
+      {
+        stepNumber: 15,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2, 3],
+        variables: [
+          { name: 'total', value: '80', type: 'number' },
+          { name: 'i', value: '4', highlight: true, type: 'number' },
+        ],
+        conditionCheck: { expression: '4 < 4', result: false },
+        consoleOutput: [
+          '+10 pts -> Total: 10',
+          '+25 pts -> Total: 35',
+          '+15 pts -> Total: 50',
+          '+30 pts -> Total: 80',
+        ],
+        explanation: 'i++ muda i para 4. A condição 4 < 4 é FALSA, então saímos do loop.',
+      },
+      {
+        stepNumber: 16,
+        activeLine: 7,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2, 3],
+        variables: [{ name: 'total', value: '80', type: 'number' }],
+        consoleOutput: [
+          '+10 pts -> Total: 10',
+          '+25 pts -> Total: 35',
+          '+15 pts -> Total: 50',
+          '+30 pts -> Total: 80',
+          'Pontuação final: 80',
+        ],
+        explanation: 'Fora do loop, exibimos a pontuação final acumulada: 80!',
+      },
+    ],
+  },
+  {
+    id: 'while-busca',
+    title: 'Buscar com while',
+    subtitle: 'Parando o loop assim que encontramos o item desejado',
+    loopType: 'while',
+    arrayName: 'mochila',
+    arrayItems: ['Caderno', 'Lápis', 'Chave', 'Garrafa'],
+    codeLines: [
+      'const mochila = ["Caderno", "Lápis", "Chave", "Garrafa"];',
+      'let i = 0;',
+      'let achou = false;',
+      'while (i < mochila.length && !achou) {',
+      '  if (mochila[i] === "Chave") {',
+      '    achou = true;',
+      '    console.log("Achou no índice " + i + "!");',
+      '  }',
+      '  i++;',
+      '}',
+    ],
+    steps: [
+      {
+        stepNumber: 1,
+        activeLine: 1,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [],
+        consoleOutput: [],
+        explanation:
+          'Criamos o array "mochila" com 4 objetos. Queremos descobrir onde está a "Chave".',
+      },
+      {
+        stepNumber: 2,
+        activeLine: 2,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [{ name: 'i', value: '0', highlight: true, type: 'number' }],
+        consoleOutput: [],
+        explanation:
+          'No "while", declaramos o contador i = 0 fora do loop, antes dele começar.',
+      },
+      {
+        stepNumber: 3,
+        activeLine: 3,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [
+          { name: 'i', value: '0', type: 'number' },
+          { name: 'achou', value: 'false', highlight: true, type: 'boolean' },
+        ],
+        consoleOutput: [],
+        explanation:
+          'Criamos a variável booleana "achou" começando como false (ainda não encontramos).',
+      },
+      {
+        stepNumber: 4,
+        activeLine: 4,
+        activeIndex: null,
+        visitedIndices: [],
+        variables: [
+          { name: 'i', value: '0', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '0 < 4 && !false', result: true },
+        consoleOutput: [],
+        explanation:
+          'Testamos a condição do while: i < 4 (verdadeiro) E !achou (não achou ainda = verdadeiro). Entramos!',
+      },
+      {
+        stepNumber: 5,
+        activeLine: 5,
+        activeIndex: 0,
+        visitedIndices: [],
+        variables: [
+          { name: 'i', value: '0', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '"Caderno" === "Chave"', result: false },
+        consoleOutput: [],
+        explanation:
+          'Verificamos mochila[0], que é "Caderno". Não é "Chave", então pulamos o bloco do if.',
+      },
+      {
+        stepNumber: 6,
+        activeLine: 9,
+        activeIndex: 0,
+        visitedIndices: [0],
+        variables: [
+          { name: 'i', value: '1', highlight: true, type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        consoleOutput: [],
+        explanation:
+          'Importante! No while precisamos atualizar i++ manualmente. Agora i passa a ser 1.',
+      },
+      {
+        stepNumber: 7,
+        activeLine: 4,
+        activeIndex: null,
+        visitedIndices: [0],
+        variables: [
+          { name: 'i', value: '1', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '1 < 4 && !false', result: true },
+        consoleOutput: [],
+        explanation: 'Testamos o while novamente: 1 < 4 e !false continuam verdadeiros.',
+      },
+      {
+        stepNumber: 8,
+        activeLine: 5,
+        activeIndex: 1,
+        visitedIndices: [0],
+        variables: [
+          { name: 'i', value: '1', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '"Lápis" === "Chave"', result: false },
+        consoleOutput: [],
+        explanation: 'Verificamos mochila[1], que é "Lápis". Ainda não é a "Chave".',
+      },
+      {
+        stepNumber: 9,
+        activeLine: 9,
+        activeIndex: 1,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'i', value: '2', highlight: true, type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        consoleOutput: [],
+        explanation: 'Avançamos o contador: i++ transforma i em 2.',
+      },
+      {
+        stepNumber: 10,
+        activeLine: 4,
+        activeIndex: null,
+        visitedIndices: [0, 1],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '2 < 4 && !false', result: true },
+        consoleOutput: [],
+        explanation: 'Condição 2 < 4 && !false é verdadeira. Vamos olhar o índice 2!',
+      },
+      {
+        stepNumber: 11,
+        activeLine: 5,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        matchedIndices: [2],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'achou', value: 'false', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '"Chave" === "Chave"', result: true },
+        consoleOutput: [],
+        explanation:
+          'Bingo! mochila[2] é exatamente "Chave"! O if é verdadeiro e entramos nele.',
+      },
+      {
+        stepNumber: 12,
+        activeLine: 6,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        matchedIndices: [2],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'achou', value: 'true', highlight: true, type: 'boolean' },
+        ],
+        consoleOutput: [],
+        explanation:
+          'Mudamos "achou" para true. Isso avisará o while na próxima checagem que podemos parar.',
+      },
+      {
+        stepNumber: 13,
+        activeLine: 7,
+        activeIndex: 2,
+        visitedIndices: [0, 1],
+        matchedIndices: [2],
+        variables: [
+          { name: 'i', value: '2', type: 'number' },
+          { name: 'achou', value: 'true', type: 'boolean' },
+        ],
+        consoleOutput: ['Achou no índice 2!'],
+        explanation: 'Mostramos no console que encontramos a chave na posição 2.',
+      },
+      {
+        stepNumber: 14,
+        activeLine: 9,
+        activeIndex: 2,
+        visitedIndices: [0, 1, 2],
+        matchedIndices: [2],
+        variables: [
+          { name: 'i', value: '3', highlight: true, type: 'number' },
+          { name: 'achou', value: 'true', type: 'boolean' },
+        ],
+        consoleOutput: ['Achou no índice 2!'],
+        explanation: 'O i++ é executado e i vai para 3.',
+      },
+      {
+        stepNumber: 15,
+        activeLine: 4,
+        activeIndex: null,
+        visitedIndices: [0, 1, 2],
+        matchedIndices: [2],
+        variables: [
+          { name: 'i', value: '3', type: 'number' },
+          { name: 'achou', value: 'true', type: 'boolean' },
+        ],
+        conditionCheck: { expression: '3 < 4 && !true', result: false },
+        consoleOutput: ['Achou no índice 2!'],
+        explanation:
+          'Veja a mágica do while: 3 < 4 é verdadeiro, mas !true é FALSO! Como a condição falhou, o loop para na hora sem precisar ler "Garrafa"!',
+      },
+    ],
+  },
+];
+
+export const PRACTICAL_EXAMPLES: PracticalExample[] = [
+  {
+    id: 'somar-notas',
+    title: '1. Somar notas de um array',
+    summary: 'Acumule os valores de uma lista de notas e calcule a média da turma.',
+    tag: 'Acumulador + for',
+    goal: 'Percorrer cada nota, somar em uma variável acumuladora e dividir pela quantidade de notas (.length).',
+    lines: [
+      {
+        lineNumber: 1,
+        code: 'const notas = [7.5, 8.0, 6.5, 10.0];',
+        comment: 'Criamos um array com 4 notas numéricas.',
+      },
+      {
+        lineNumber: 2,
+        code: 'let soma = 0;',
+        comment: 'Variável que começa em 0 para guardar a soma aos poucos.',
+      },
+      {
+        lineNumber: 3,
+        code: 'for (let i = 0; i < notas.length; i++) {',
+        comment: 'O loop vai de i = 0 até o último índice (notas.length - 1).',
+      },
+      {
+        lineNumber: 4,
+        code: '  soma = soma + notas[i];',
+        comment: 'Pegamos a nota da posição i e somamos ao que já estava em soma.',
+      },
+      {
+        lineNumber: 5,
+        code: '}',
+        comment: 'Fim do bloco que se repete a cada volta.',
+      },
+      {
+        lineNumber: 6,
+        code: 'const media = soma / notas.length;',
+        comment: 'Dividimos a soma total pelo tamanho do array (4) para achar a média.',
+      },
+      {
+        lineNumber: 7,
+        code: 'console.log("Soma total:", soma);',
+        comment: 'Exibimos a soma final no console.',
+      },
+      {
+        lineNumber: 8,
+        code: 'console.log("Média final:", media);',
+        comment: 'Exibimos a média calculada no console.',
+      },
+    ],
+    presets: [
+      { id: 'turma-a', label: 'Turma A [7.5, 8, 6.5, 10]', inputArray: [7.5, 8, 6.5, 10] },
+      { id: 'turma-b', label: 'Turma B [5, 7, 9, 9]', inputArray: [5, 7, 9, 9] },
+      { id: 'recuperacao', label: 'Simulado [4, 6, 5, 7]', inputArray: [4, 6, 5, 7] },
+    ],
+  },
+  {
+    id: 'filtrar-pares',
+    title: '2. Filtrar números pares',
+    summary: 'Combine um loop for com um condicional if para separar apenas os pares.',
+    tag: 'Filtro + if',
+    goal: 'Usar o operador resto (%) dentro do loop para testar se cada número é divisível por 2 e guardá-lo em um novo array.',
+    lines: [
+      {
+        lineNumber: 1,
+        code: 'const numeros = [3, 8, 11, 14, 7, 20];',
+        comment: 'Array original com números variados (pares e ímpares).',
+      },
+      {
+        lineNumber: 2,
+        code: 'const pares = [];',
+        comment: 'Criamos um array vazio que vai receber só os números pares.',
+      },
+      {
+        lineNumber: 3,
+        code: 'for (let i = 0; i < numeros.length; i++) {',
+        comment: 'Passamos por todas as posições do array numeros.',
+      },
+      {
+        lineNumber: 4,
+        code: '  if (numeros[i] % 2 === 0) {',
+        comment: 'Testamos se o resto da divisão por 2 é zero (ou seja, se é par).',
+      },
+      {
+        lineNumber: 5,
+        code: '    pares.push(numeros[i]);',
+        comment: 'Se for par, o método .push() adiciona o número no final do array pares.',
+      },
+      {
+        lineNumber: 6,
+        code: '  }',
+        comment: 'Fecha a condição if.',
+      },
+      {
+        lineNumber: 7,
+        code: '}',
+        comment: 'Fecha o loop for.',
+      },
+      {
+        lineNumber: 8,
+        code: 'console.log("Pares encontrados:", pares);',
+        comment: 'Mostra o novo array apenas com os números filtrados.',
+      },
+    ],
+    presets: [
+      { id: 'seq-1', label: 'Lista [3, 8, 11, 14, 7, 20]', inputArray: [3, 8, 11, 14, 7, 20] },
+      { id: 'seq-2', label: 'Lista [2, 4, 5, 9, 12]', inputArray: [2, 4, 5, 9, 12] },
+      { id: 'seq-3', label: 'Só ímpares [1, 3, 5, 7]', inputArray: [1, 3, 5, 7] },
+    ],
+  },
+  {
+    id: 'buscar-item',
+    title: '3. Buscar um item na lista',
+    summary: 'Procure um produto específico no carrinho e informe sua posição.',
+    tag: 'Busca + booleano',
+    goal: 'Verificar item por item até descobrir se o valor procurado existe na lista e em qual índice ele está.',
+    lines: [
+      {
+        lineNumber: 1,
+        code: 'const carrinho = ["Mouse", "Teclado", "Monitor", "Cabo"];',
+        comment: 'Lista de produtos no carrinho de compras.',
+      },
+      {
+        lineNumber: 2,
+        code: 'const procurado = "Monitor";',
+        comment: 'Definimos o texto exato do item que queremos encontrar.',
+      },
+      {
+        lineNumber: 3,
+        code: 'let posicao = -1;',
+        comment: 'Começa em -1 (código comum para "ainda não encontrado").',
+      },
+      {
+        lineNumber: 4,
+        code: 'for (let i = 0; i < carrinho.length; i++) {',
+        comment: 'Percorremos o carrinho do índice 0 até o último item.',
+      },
+      {
+        lineNumber: 5,
+        code: '  if (carrinho[i] === procurado) {',
+        comment: 'Comparamos o item atual com o item procurado.',
+      },
+      {
+        lineNumber: 6,
+        code: '    posicao = i;',
+        comment: 'Se for igual, salvamos o índice i na variável posicao.',
+      },
+      {
+        lineNumber: 7,
+        code: '  }',
+        comment: 'Fecha o if.',
+      },
+      {
+        lineNumber: 8,
+        code: '}',
+        comment: 'Fecha o for.',
+      },
+      {
+        lineNumber: 9,
+        code: 'if (posicao !== -1) {',
+        comment: 'Se posicao mudou de -1, significa que o item estava na lista!',
+      },
+      {
+        lineNumber: 10,
+        code: '  console.log("Encontrado no índice:", posicao);',
+        comment: 'Mostra em qual posição o produto foi achado.',
+      },
+      {
+        lineNumber: 11,
+        code: '} else {',
+        comment: 'Caso contrário (ainda vale -1)...',
+      },
+      {
+        lineNumber: 12,
+        code: '  console.log("Item não está no carrinho.");',
+        comment: 'Avisa o usuário que o produto não foi encontrado.',
+      },
+      {
+        lineNumber: 13,
+        code: '}',
+        comment: 'Fecha o bloco else.',
+      },
+    ],
+    presets: [
+      {
+        id: 'busca-monitor',
+        label: 'Buscar "Monitor"',
+        inputArray: ['Mouse', 'Teclado', 'Monitor', 'Cabo'],
+        searchTarget: 'Monitor',
+      },
+      {
+        id: 'busca-mouse',
+        label: 'Buscar "Mouse"',
+        inputArray: ['Mouse', 'Teclado', 'Monitor', 'Cabo'],
+        searchTarget: 'Mouse',
+      },
+      {
+        id: 'busca-fone',
+        label: 'Buscar "Fone"',
+        inputArray: ['Mouse', 'Teclado', 'Monitor', 'Cabo'],
+        searchTarget: 'Fone',
+      },
+    ],
+  },
+];
+
+export const CHALLENGES: ChallengeItem[] = [
+  {
+    id: 'desafio-1',
+    type: 'multiple-choice',
+    number: 1,
+    title: 'O Mistério do Último Índice',
+    difficulty: 'Iniciante',
+    prompt:
+      'Ana criou um array com 4 cores favoritas. Qual linha imprime corretamente a ÚLTIMA cor ("Roxo") sem causar undefined?',
+    codeSnippet: [
+      'const cores = ["Azul", "Verde", "Amarelo", "Roxo"];',
+      '// Qual opção imprime "Roxo"?',
+    ],
+    options: [
+      {
+        id: 'a',
+        label: 'Opção A',
+        code: 'console.log(cores[4]);',
+      },
+      {
+        id: 'b',
+        label: 'Opção B',
+        code: 'console.log(cores[cores.length]);',
+      },
+      {
+        id: 'c',
+        label: 'Opção C',
+        code: 'console.log(cores[cores.length - 1]);',
+      },
+      {
+        id: 'd',
+        label: 'Opção D',
+        code: 'console.log(cores[1]);',
+      },
+    ],
+    correctOptionId: 'c',
+    tip: 'Lembre-se: a contagem dos índices em JavaScript sempre começa no 0, não no 1!',
+    commentedAnswer:
+      'Como o array tem 4 elementos, cores.length vale 4. Porém, os índices são 0 ("Azul"), 1 ("Verde"), 2 ("Amarelo") e 3 ("Roxo"). Por isso, cores[4] ou cores[cores.length] retornam undefined. A fórmula segura para pegar sempre o último item é cores[cores.length - 1], que equivale a cores[3]!',
+  },
+  {
+    id: 'desafio-2',
+    type: 'fill-blank',
+    number: 2,
+    title: 'Aprovados no Semestre (Lacunas no for)',
+    difficulty: 'Iniciante',
+    prompt:
+      'Complete as 3 lacunas do código para contar quantos alunos tiraram nota maior ou igual a 7.',
+    codeSegments: [
+      'const notas = [5, 8, 9, 6, 10];\nlet aprovados = 0;\n\nfor (let i = 0; i < notas.',
+      { blankId: 'b1' },
+      '; i++) {\n  if (notas[',
+      { blankId: 'b2' },
+      '] >= 7) {\n    aprovados',
+      { blankId: 'b3' },
+      ';\n  }\n}\nconsole.log("Total de aprovados:", aprovados);',
+    ],
+    blanks: [
+      {
+        id: 'b1',
+        placeholder: 'tamanho?',
+        correctAnswers: ['length'],
+        quickChoices: ['length', 'size', 'count'],
+      },
+      {
+        id: 'b2',
+        placeholder: 'índice?',
+        correctAnswers: ['i'],
+        quickChoices: ['i', '0', 'aprovados'],
+      },
+      {
+        id: 'b3',
+        placeholder: 'somar 1?',
+        correctAnswers: ['++', '+= 1', '+=1'],
+        quickChoices: ['++', '--', '= 1'],
+      },
+    ],
+    expectedOutput: 'Total de aprovados: 3',
+    tip: 'Use a propriedade que mede o tamanho do array, o contador do loop entre colchetes e o operador de incremento.',
+    commentedAnswer:
+      '1) notas.length retorna 5 (o tamanho da lista), garantindo que o loop pare no índice 4. 2) notas[i] acessa a nota da volta atual (0, depois 1, 2, 3, 4). 3) aprovados++ soma +1 ao contador toda vez que a nota é 7 ou maior (8, 9 e 10 -> total 3).',
+  },
+  {
+    id: 'desafio-3',
+    type: 'fill-blank',
+    number: 3,
+    title: 'Salvando o Loop while',
+    difficulty: 'Intermediário',
+    prompt:
+      'Este loop while precisa imprimir os 3 primeiros nomes da fila. Complete as lacunas para que ele funcione e NÃO vire um loop infinito!',
+    codeSegments: [
+      'const fila = ["Lia", "Beto", "Caio"];\nlet i = ',
+      { blankId: 'b1' },
+      ';\n\n',
+      { blankId: 'b2' },
+      ' (i < fila.length) {\n  console.log(fila[i]);\n  ',
+      { blankId: 'b3' },
+      ';\n}',
+    ],
+    blanks: [
+      {
+        id: 'b1',
+        placeholder: 'início?',
+        correctAnswers: ['0'],
+        quickChoices: ['0', '1', '-1'],
+      },
+      {
+        id: 'b2',
+        placeholder: 'estrutura?',
+        correctAnswers: ['while'],
+        quickChoices: ['while', 'if', 'const'],
+      },
+      {
+        id: 'b3',
+        placeholder: 'avançar?',
+        correctAnswers: ['i++', 'i += 1', 'i+=1', 'i = i + 1'],
+        quickChoices: ['i++', 'i--', 'fila.length'],
+      },
+    ],
+    expectedOutput: 'Lia\nBeto\nCaio',
+    tip: 'Todo array começa no índice 0 e o while precisa aumentar o contador dentro do bloco para um dia a condição ficar falsa.',
+    commentedAnswer:
+      '1) Começamos com i = 0 para não pular "Lia" (que está no índice 0). 2) A palavra-chave é while, que repete enquanto i < fila.length for verdadeiro. 3) Sem i++ no final do bloco, i continuaria sendo 0 para sempre, travando o programa em um loop infinito!',
+  },
+];
